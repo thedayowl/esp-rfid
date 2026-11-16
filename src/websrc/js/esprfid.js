@@ -58,6 +58,9 @@ var config = {
     "general": {
         "hostnm": "esp-rfid",
         "restart": 0,
+        "logevents": 1,
+        "logaccess": 1,
+        "logminfree": 10,
         "pswd": "admin",
         "openinghours": [
           "111111111111111111111111",
@@ -339,6 +342,9 @@ function savegeneral() {
   } else {
     config.general.restart = parseInt(document.getElementById("autorestart").value);
   }
+  config.general.logevents = parseInt(document.getElementById("logevents").value);
+  config.general.logaccess = parseInt(document.getElementById("logaccess").value);
+  config.general.logminfree = parseInt(document.getElementById("logminfree").value);
   config.general.openinghours = extractOpeningHours();
   uncommited();
 }
@@ -622,6 +628,17 @@ function listgeneral() {
       $("#autorestart-custom").addClass("hidden");
     }
   });
+  document.getElementById("logevents").value = (config.general.logevents === 0) ? "0" : "1";
+  document.getElementById("logaccess").value = (config.general.logaccess === 0) ? "0" : "1";
+  var logMinFree = (typeof config.general.logminfree === "number") ? config.general.logminfree : 10;
+  var logMinFreeSelect = document.getElementById("logminfree");
+  if (!logMinFreeSelect.querySelector("option[value=\"" + logMinFree + "\"]")) {
+    var opt = document.createElement("option");
+    opt.value = logMinFree;
+    opt.text = logMinFree + "%";
+    logMinFreeSelect.appendChild(opt);
+  }
+  logMinFreeSelect.value = String(logMinFree);
   populateOpeningHours();
 }
 

@@ -111,6 +111,39 @@
         <br>
     </div>
     <div class="row form-group">
+        <label class="col-xs-3">Event Log<i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Store system events (door open/close, wifi, restarts...) on the device flash. Disable this to stop the flash filling up. Events are still sent over MQTT if MQTT event logging is enabled."></i></label>
+        <span class="col-xs-9 col-md-5">
+            <select class="form-control input-sm" id="logevents">
+                <option value="1" selected>Store on device</option>
+                <option value="0">Disabled</option>
+            </select>
+        </span>
+        <br>
+    </div>
+    <div class="row form-group">
+        <label class="col-xs-3">Access Log<i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Store every card scan / door access on the device flash. Disable this to stop the flash filling up. Access is still reported over MQTT when MQTT is enabled."></i></label>
+        <span class="col-xs-9 col-md-5">
+            <select class="form-control input-sm" id="logaccess">
+                <option value="1" selected>Store on device</option>
+                <option value="0">Disabled</option>
+            </select>
+        </span>
+        <br>
+    </div>
+    <div class="row form-group">
+        <label class="col-xs-3">Log Free Space Reserve<i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="Stop writing log files when free flash space drops below this percentage. Keeps the device fast and leaves room for users and settings."></i></label>
+        <span class="col-xs-9 col-md-5">
+            <select class="form-control input-sm" id="logminfree">
+                <option value="5">5%</option>
+                <option value="10" selected>10%</option>
+                <option value="20">20%</option>
+                <option value="30">30%</option>
+                <option value="50">50%</option>
+            </select>
+        </span>
+        <br>
+    </div>
+    <div class="row form-group">
         <label class="col-xs-3">Opening hours<i style="margin-left: 10px;" class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="popover" data-trigger="hover" data-placement="right" data-content="When non-admin users can open the door."></i></label>
         <span class="col-xs-9 col-md-5">
             <table id="openinghours"></table>

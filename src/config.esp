@@ -165,6 +165,23 @@ bool ICACHE_FLASH_ATTR loadConfiguration(Config &config)
 		config.fallbackMode = network["fallbackmode"] == 1;
 	}
 	config.autoRestartIntervalSeconds = general["restart"];
+	if (general.containsKey("logevents"))
+	{
+		config.logEventsToFlash = general["logevents"] == 1;
+	}
+	if (general.containsKey("logaccess"))
+	{
+		config.logAccessToFlash = general["logaccess"] == 1;
+	}
+	if (general.containsKey("logminfree"))
+	{
+		int minFree = general["logminfree"];
+		if (minFree < 0)
+			minFree = 0;
+		if (minFree > 90)
+			minFree = 90;
+		config.logMinFreePercent = minFree;
+	}
 	config.wifiTimeout = network["offtime"];
 	const char *bssidmac = network["bssid"];
 	if (strlen(bssidmac) > 0)

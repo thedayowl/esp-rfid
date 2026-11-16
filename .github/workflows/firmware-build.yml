@@ -1,0 +1,57 @@
+name: Firmware build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Regenerate the embedded web UI headers (src/webh) from src/websrc so the
+      # firmware always contains the current web interface.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: tools/webfilesbuilder/package-lock.json
+
+      - name: Build web UI headers
+        working-directory: tools/webfilesbuilder
+        run: |
+          npm ci
+          npx gulp
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Cache PlatformIO
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.platformio
+            ~/.cache/pip
+          key: pio-${{ runner.os }}-${{ hashFiles('platformio.ini') }}
+          restore-keys: pio-${{ runner.os }}-
+
+      - name: Install PlatformIO
+        run: |
+          python -m pip install --upgrade pip
+          pip install platformio
+
+      - name: Compile firmware
+        run: pio run -e generic -e debug
+
+      - name: Upload firmware
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-${{ github.sha }}
+          path: |
+            bin/generic.bin
+            bin/debug.bin
+          if-no-files-found: error

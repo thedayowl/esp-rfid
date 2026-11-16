@@ -21,6 +21,9 @@ struct Config {
     char *httpPass = NULL;
     IPAddress ipAddress;
     uint8_t ledwaitingpin = 255;
+    bool logEventsToFlash = true;   // write the event log (eventlog.json) to SPIFFS
+    bool logAccessToFlash = true;   // write the access log (latestlog.json) to SPIFFS
+    uint8_t logMinFreePercent = 10; // stop writing logs when SPIFFS free space drops below this percentage
     int lockType[MAX_NUM_RELAYS];
     uint8_t maxOpenDoorTime = 0;
     bool mqttAutoTopic = false;
