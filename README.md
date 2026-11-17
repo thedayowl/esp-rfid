@@ -96,6 +96,18 @@ When you run ```platformio run``` for the first time, it will download the toolc
 
 The resulting (built) image(s) can be found in the directory ```/bin``` created during the build process.
 
+If you changed anything in ```src/websrc``` you must regenerate the embedded web files in ```src/webh``` before building:
+
+```
+cd tools/webfilesbuilder
+npm ci
+npx gulp
+```
+
+##### Continuous integration
+
+Every push and pull request runs the **Firmware build** GitHub Actions workflow (```.github/workflows/firmware-build.yml```). It regenerates the web UI headers, compiles the ```generic``` and ```debug``` firmware and uploads ```generic.bin``` and ```debug.bin``` as an artifact named ```firmware-<commit>```. Download it from the *Artifacts* section of the workflow run on the *Actions* tab. The workflow can also be started by hand with *Run workflow*.
+
 ##### How to modify the project
 
 If you want to modify the code, you can read more info in the [CONTRIBUTING](./CONTRIBUTING.md) file.
@@ -137,6 +149,17 @@ For Wiegand based readers, you can configure D0 and D1 pins via settings page. B
 ### MQTT
 You can integrate ESP-RFID with other systems using MQTT. Read the [additional documentation](./README-MQTT.md) for all the details.
 
+### Logging
+By default ESP-RFID stores two log files on its flash file system (SPIFFS): the event log (```eventlog.json```: door open/close, Wi-Fi, restarts, etc.) and the access log (```latestlog.json```: every card scan). On a busy door these grow until the flash is full, and SPIFFS becomes very slow when it is nearly full.
+
+Under **Settings → General** you can control this:
+
+* **Event Log** - *Store on device* or *Disabled*. When MQTT event logging is enabled, events are sent over MQTT instead of being stored, regardless of this setting.
+* **Access Log** - *Store on device* or *Disabled*. Access messages are still sent over MQTT when MQTT is enabled.
+* **Log Free Space Reserve** - log files stop being written when free flash space drops below this percentage (default 10%, never less than 8 KB), so there is always room left for users and settings.
+
+If a device is already full, delete the old log files from **Logfile Maintenance** to recover space and speed. The same options can be set in the configuration file / via MQTT as ```general.logevents``` (0/1), ```general.logaccess``` (0/1) and ```general.logminfree``` (percent, 0-90).
+
 ### Known Issues
 * You need to connect your MFRC522 reader to your ESP properly or you will end up with a boot loop
 * Please also check [GitHub issues](https://github.com/esprfid/esp-rfid/issues).
@@ -177,7 +200,7 @@ At least 1000 unique User (RFID Tag) can be handled, the test were performed on 
 
 #### Additional testing is needed:
 
-* Logging needs testing. How long should it need to log access? What if a Boss needs whole year log?
+* Logging needs testing. How long should it need to log access? What if a Boss needs whole year log? (Local logging can be disabled or capped, see [Logging](#logging); for long-term logs send them over MQTT.)
 * Reliability on Flash (these NOR Flash have limited write cycle on their cells). It depends on manufacturer choice of Flash Chip and usage.
 
 ## Community

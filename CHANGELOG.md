@@ -1,6 +1,18 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [Unreleased]
+
+#### Added
+- [firmware] Option to disable storing the event log on the device flash (`general.logevents`)
+- [firmware] Option to disable storing the access log on the device flash (`general.logaccess`)
+- [firmware] Log free space reserve (`general.logminfree`, default 10%): log files stop being written when free SPIFFS space drops below this percentage (never less than 8 KB). This prevents the device from slowing down and being unable to save users or settings when the flash fills up with logs
+- [webui] Event Log, Access Log and Log Free Space Reserve options in General Settings
+- [ci] New `Firmware build` GitHub Actions workflow: rebuilds the web UI headers, compiles the `generic` and `debug` firmware on every push, pull request or manual run, and uploads the binaries as a build artifact
+
+#### Changed
+- [ci] Replaced the `Platformio build` workflow with `Firmware build`
+
 ## [2.0.0] - 2024-11-02
 
 ### Bugfixes

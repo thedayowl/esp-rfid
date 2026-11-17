@@ -379,6 +379,9 @@ var configfile = {
     "general": {
         "hostnm": "esp-rfid",
         "restart": "86400",
+        "logevents": 1,
+        "logaccess": 1,
+        "logminfree": 10,
         "pswd": "admin",
         "version": "v0.6",
         "openinghours": [

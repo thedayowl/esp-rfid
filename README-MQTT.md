@@ -319,6 +319,8 @@ In case of multiple doors managed by one esp-rfid, you'll get an array for doorn
 ### Log messages
 Besides the above messages, ESP-RFID can send all the logs via MQTT instead of storing those locally. If this is enabled via the web UI, also the following messages are sent.
 
+Storing logs on the device can also be turned off completely in **Settings → General** (```general.logevents``` and ```general.logaccess``` in the configuration). This is recommended on busy doors where the logs would otherwise fill the flash; use MQTT to keep a history instead. See [Logging](./README.md#logging).
+
 #### Door status
 If the door sensor is enabled, two messages are sent, one when the door is opened:
 
